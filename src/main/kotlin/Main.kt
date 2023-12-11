@@ -1,11 +1,5 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+fun main() {
+    val input = object {}::class.java.getResource("day1-2.txt")!!.readText()
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
-}
-
-fun sample(a: Int, b: Int): Int {
-    return a + b
+    println(processText(input))
 }
