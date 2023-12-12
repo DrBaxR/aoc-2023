@@ -9,3 +9,10 @@ fun getPossibleGames(text: String): List<Game> {
 
     return games.filter { it.isValid(TOTAL_RED, TOTAL_GREEN, TOTAL_BLUE) }
 }
+
+fun getPowerSumOfMinimums(text: String): Int {
+    val games = text.split("\n").map { parse(it) }
+    val minimumSets = games.map { it.getMinimumSet() }
+
+    return minimumSets.sumOf { it.getPower() }
+}
