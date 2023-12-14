@@ -62,12 +62,10 @@ class EngineMap(text: String) {
                     current = current * 10 + c
                 } else {
                     if (current != 0) {
-                        for (i in start until end) {
-                            val adjacent = getAdjacent(lineIndex, i)
-                            if (adjacent.any { it is String && it != "." }) {
-                                result.add(current)
-                                break
-                            }
+                        val adjacent = (start until end).flatMap { getAdjacent(lineIndex, it) }
+
+                        if (adjacent.any { isSymbol(it) }) {
+                            result.add(current)
                         }
                     }
 
@@ -80,4 +78,6 @@ class EngineMap(text: String) {
 
         return result
     }
+
+    private fun isSymbol(c: Any): Boolean = c is String && c != "."
 }
