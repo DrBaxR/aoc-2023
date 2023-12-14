@@ -1,7 +1,7 @@
-import day2.getPowerSumOfMinimums
+import day3.getSum
 
 fun main() {
-    val input = object {}::class.java.getResource("day2.txt")!!.readText()
+    val input = object {}::class.java.getResource("day3.txt")!!.readText()
 
-    println(getPowerSumOfMinimums(input))
+    println(getSum(input))
 }

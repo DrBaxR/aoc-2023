@@ -9,7 +9,7 @@ class EngineMap(text: String) {
 
         map = lines.map { line ->
             val splitLine = line.trim().split("")
-            groupDigits(splitLine.subList(1, splitLine.size - 1)).map { char ->
+            splitLine.subList(1, splitLine.size - 1).map { char ->
                 try {
                     char.toInt()
                 } catch (e: NumberFormatException) {
@@ -17,25 +17,6 @@ class EngineMap(text: String) {
                 }
             }
         }
-    }
-
-    private fun groupDigits(list: List<String>): List<String> {
-        val result = mutableListOf<String>()
-
-        var current = ""
-        for (char in list) {
-            if (char.toIntOrNull() != null) {
-                current += char
-            } else {
-                if (current.isNotEmpty()) {
-                    result.add(current)
-                    current = ""
-                }
-                result.add(char)
-            }
-        }
-
-        return result
     }
 
     fun getPart(i: Int, j: Int): Any {
@@ -64,28 +45,39 @@ class EngineMap(text: String) {
         return result
     }
 
-    fun getNumberIndices(): List<Pair<Int, Int>> {
-        val result = mutableListOf<Pair<Int, Int>>()
+    fun getNumbersWithAdjacentSymbols(): List<Int> {
+        val result = mutableListOf<Int>()
 
-        for (i in map.indices) {
-            for (j in map[i].indices) {
-                if (map[i][j] is Int) {
-                    result.add(Pair(i, j))
+        map.forEachIndexed { lineIndex, line ->
+            var current = 0
+            var start = 0
+            var end = 0
+
+            for (c in line) {
+
+                if (c is Int) {
+                    if (current == 0) {
+                        start = end
+                    }
+                    current = current * 10 + c
+                } else {
+                    if (current != 0) {
+                        for (i in start until end) {
+                            val adjacent = getAdjacent(lineIndex, i)
+                            if (adjacent.any { it is String && it != "." }) {
+                                result.add(current)
+                                break
+                            }
+                        }
+                    }
+
+                    current = 0
                 }
+
+                end += 1
             }
         }
 
         return result
-    }
-
-    fun getNumbersWithAdjacentSymbols(): List<Int> {
-        val numberIndices = getNumberIndices()
-
-        return numberIndices.filter { numberIndex ->
-            val adjacent = getAdjacent(numberIndex.first, numberIndex.second)
-            adjacent.any { it is String && it != "." }
-        }.map { numberIndex ->
-            getPart(numberIndex.first, numberIndex.second) as Int
-        }
     }
 }
