@@ -45,8 +45,8 @@ class EngineMap(text: String) {
         return result
     }
 
-    fun getNumbersWithAdjacentSymbols(): List<Int> {
-        val result = mutableListOf<Int>()
+    private fun getNumbers(): List<EngineNumber> {
+        val result = mutableListOf<EngineNumber>()
 
         map.forEachIndexed { lineIndex, line ->
             var current = 0
@@ -54,22 +54,26 @@ class EngineMap(text: String) {
             var end = 0
 
             for (c in line) {
-
                 if (c is Int) {
-                    if (current == 0) {
-                        start = end
-                    }
                     current = current * 10 + c
-                } else {
-                    if (current != 0) {
-                        val adjacent = (start until end).flatMap { getAdjacent(lineIndex, it) }
 
-                        if (adjacent.any { isSymbol(it) }) {
-                            result.add(current)
+                    try {
+                        if (line[end - 1] is String) {
+                            start = end
                         }
+                    } catch (e: IndexOutOfBoundsException) {
+                        start = 0
                     }
 
-                    current = 0
+                    try {
+                        if (line[end + 1] is String) {
+                            result.add(EngineNumber(lineIndex, start, end, current))
+                            current = 0
+                        }
+                    } catch (e: IndexOutOfBoundsException) {
+                        result.add(EngineNumber(lineIndex, start, end, current))
+                        current = 0
+                    }
                 }
 
                 end += 1
@@ -77,6 +81,40 @@ class EngineMap(text: String) {
         }
 
         return result
+    }
+
+    private fun getAdjacent(number: EngineNumber): List<Any> {
+        val result = mutableListOf<Any>()
+
+        val iRange = number.startIndex - 1..number.endIndex + 1
+        val jRange = number.lineNumber - 1..number.lineNumber + 1
+
+        for (iOffset in iRange) {
+            for (jOffset in jRange) {
+                try {
+                    if (jOffset == number.lineNumber && iOffset in number.startIndex..number.endIndex) {
+                        continue
+                    }
+                    result.add(map[jOffset][iOffset])
+                } catch (e: IndexOutOfBoundsException) {
+                    continue
+                }
+            }
+        }
+
+        return result
+    }
+
+
+
+    fun getNumbersWithAdjacentSymbols(): List<Int> {
+        val numbers = getNumbers()
+
+        return numbers.filter { number ->
+            val adjacent = getAdjacent(number)
+
+            adjacent.any { isSymbol(it) }
+        }.map { it.number }
     }
 
     private fun isSymbol(c: Any): Boolean = c is String && c != "."
