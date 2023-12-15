@@ -1,7 +1,7 @@
-import day3.getSum
+import day3.getGearRationSum
 
 fun main() {
     val input = object {}::class.java.getResource("day3.txt")!!.readText()
 
-    println(getSum(input))
+    println(getGearRationSum(input))
 }
