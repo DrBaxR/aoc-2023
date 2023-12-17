@@ -20,6 +20,8 @@ data class GardenMapRange(
 
         return destinationRangeStart + (value - sourceRangeStart)
     }
+
+    // TODO: getMapped for ranges - something like getMapped(range: SeedRange): List<SeedRange>, where SeedRange is [start, end)
 }
 
 class OutOfRangeException(value: Long): Exception("Value $value is out of range")
