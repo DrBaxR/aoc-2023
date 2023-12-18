@@ -1,7 +1,8 @@
-import day6.part2
+import day7.Hand
 
 fun main() {
-    val input = object {}::class.java.getResource("day6.txt")!!.readText()
+    val hand1 = Hand("A23A4")
+    val hand2 = Hand("A23A4")
 
-    println(part2(input))
+    println(hand1 >= hand2)
 }
