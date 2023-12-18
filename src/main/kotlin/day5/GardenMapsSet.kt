@@ -33,4 +33,19 @@ class GardenMapsSet(text: String) {
 
         return seedMappings.minOrNull()!!
     }
+
+    fun getSmallestMappingViaRanges(): Long {
+        val seedRanges = mutableListOf<SeedRange>()
+
+        for (i in 0 until seeds.size / 2) {
+            seedRanges.add(SeedRange(seeds[i * 2], seeds[i * 2] + seeds[i * 2 + 1]))
+        }
+
+        // TODO: do this for all seed ranges and get min value
+        val mappedRanges = maps.fold(listOf(seedRanges[0])) { acc, gardenMap ->
+            gardenMap.getMapped(acc)
+        }
+
+        return 0
+    }
 }

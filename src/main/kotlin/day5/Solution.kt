@@ -5,3 +5,9 @@ fun part1(text: String): Long {
 
     return gardenMapsSet.getSmallestMapping()
 }
+
+fun part2(text: String): Long {
+    val gardenMapsSet = GardenMapsSet(text)
+
+    return gardenMapsSet.getSmallestMappingViaRanges()
+}

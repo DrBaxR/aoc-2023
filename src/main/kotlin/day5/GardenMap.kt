@@ -23,4 +23,20 @@ class GardenMap(textBlock: String) {
 
         return value
     }
+
+    fun getMapped(seedRange: List<SeedRange>): List<SeedRange> {
+        val output = mutableListOf<SeedRange>()
+
+        for (range in ranges) {
+            for (s in seedRange) {
+                try {
+                    output.addAll(range.getMapped(s))
+                } catch (e: OutOfRangeException) {
+                    continue
+                }
+            }
+        }
+
+        return SeedRange.mergeRanges(output)
+    }
 }
