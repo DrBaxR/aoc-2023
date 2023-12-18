@@ -104,9 +104,12 @@ class SeedRangeTest {
 
     @Test
     fun mergeAll3() {
-        // TODO
-//        SeedRange.mergeRanges(maps[1].getMapped(maps[0].getMapped(listOf(seedRanges[0]))))
-//        3 = {SeedRange@1134} SeedRange(start=4188359137, end=3200563801)
-//        4 = {SeedRange@1135} SeedRange(start=4188359137, end=3200563801)
+        val actual = SeedRange.mergeRanges(
+            listOf(SeedRange(4188359137, 3200563801),
+                SeedRange(4188359137, 3200563801))
+        )
+
+        val expected = listOf(SeedRange(4188359137, 3200563801))
+        assertEquals(expected, actual)
     }
 }

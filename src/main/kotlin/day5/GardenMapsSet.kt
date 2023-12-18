@@ -41,11 +41,19 @@ class GardenMapsSet(text: String) {
             seedRanges.add(SeedRange(seeds[i * 2], seeds[i * 2] + seeds[i * 2 + 1]))
         }
 
-        // TODO: do this for all seed ranges and get min value
-        val mappedRanges = maps.fold(listOf(seedRanges[0])) { acc, gardenMap ->
-            gardenMap.getMapped(acc)
+        var min = Long.MAX_VALUE
+        for (seedRange in seedRanges) {
+            val mappedRanges = maps.fold(listOf(seedRange)) { acc, gardenMap ->
+                gardenMap.getMapped(acc)
+            }
+
+            for (mappedRange in mappedRanges) {
+                if (mappedRange.start < min) {
+                    min = mappedRange.start
+                }
+            }
         }
 
-        return 0
+        return min
     }
 }

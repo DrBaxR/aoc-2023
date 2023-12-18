@@ -26,7 +26,7 @@ data class SeedRange(
             }
 
             output.add(currentRange)
-            return output
+            return output.distinct()
         }
     }
 
