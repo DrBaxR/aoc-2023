@@ -13,7 +13,7 @@ data class Race(
         return marginOfError
     }
 
-    fun isWonByTimeHeld(holdTime: Long): Boolean {
+    private fun isWonByTimeHeld(holdTime: Long): Boolean {
         return duration * holdTime - holdTime * holdTime > distanceToBeat
     }
 }
