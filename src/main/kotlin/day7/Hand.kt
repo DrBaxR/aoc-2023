@@ -14,12 +14,12 @@ enum class HandType(private val value: Int) {
 
 class Hand(
     val cards: String, // string of 5 symbols
-) {
+): Comparable<Hand> {
 
-    private val handType: HandType
+    private val handType = determineHandType()
 
-    init {
-        handType = if (isFiveOfAKind()) {
+    private fun determineHandType(): HandType {
+        return if (isFiveOfAKind()) {
             HandType.FIVE_OF_A_KIND
         } else if (isFourOfAKind()) {
             HandType.FOUR_OF_A_KIND
@@ -36,7 +36,7 @@ class Hand(
         }
     }
 
-    operator fun compareTo(other: Hand): Int {
+    override operator fun compareTo(other: Hand): Int {
         if (this.handType beats other.handType) {
             return 1
         } else if (other.handType beats this.handType) {
@@ -117,5 +117,11 @@ class Hand(
             counters[s] = (counters[s] ?: 0) + 1
         }
         return counters.values.any { it == 2 }
+    }
+
+    override fun hashCode(): Int {
+        var result = cards.hashCode()
+        result = 31 * result + handType.hashCode()
+        return result
     }
 }
