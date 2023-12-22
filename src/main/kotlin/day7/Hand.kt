@@ -14,7 +14,7 @@ enum class HandType(private val value: Int) {
 
 class Hand(
     val cards: String, // string of 5 symbols
-): Comparable<Hand> {
+) : Comparable<Hand> {
 
     private val handType = determineHandType()
 
@@ -68,7 +68,8 @@ class Hand(
         for (s in cards) {
             counters[s] = (counters[s] ?: 0) + 1
         }
-        return counters.values.any { it == 5 }
+        return counters.entries
+            .any { it.value == 5 || (it.value + (counters['J'] ?: 0) == 5 && it.key != 'J') }
     }
 
     private fun isFourOfAKind(): Boolean {
@@ -76,7 +77,8 @@ class Hand(
         for (s in cards) {
             counters[s] = (counters[s] ?: 0) + 1
         }
-        return counters.values.any { it == 4 }
+        return counters.entries
+            .any { it.value == 4 || (it.value + (counters['J'] ?: 0) == 4 && it.key != 'J') }
     }
 
     private fun isFullHouse(): Boolean {
@@ -84,7 +86,26 @@ class Hand(
         for (s in cards) {
             counters[s] = (counters[s] ?: 0) + 1
         }
-        return counters.values.any { it == 3 } && counters.values.any { it == 2 }
+
+        var hasTwoOfAKind = false;
+        var hasThreeOfAKind = false;
+        for (value in counters.entries) {
+            if (value.value == 2 ) {
+                hasTwoOfAKind = true
+                counters[value.key] = 0
+            } else if (value.value + (counters['J'] ?: 0) == 2 && value.key != 'J') {
+                hasTwoOfAKind = true
+                counters['J'] = (counters['J'] ?: 0) - (2 - counters['J']!!)
+            } else if (value.value == 3) {
+                hasThreeOfAKind = true
+                counters[value.key] = 0
+            } else if (value.value + (counters['J'] ?: 0) == 3 && value.key != 'J') {
+                hasThreeOfAKind = true
+                counters['J'] = (counters['J'] ?: 0) - (3 - counters['J']!!)
+            }
+        }
+
+        return hasTwoOfAKind && hasThreeOfAKind
     }
 
     private fun isThreeOfAKind(): Boolean {
@@ -92,7 +113,8 @@ class Hand(
         for (s in cards) {
             counters[s] = (counters[s] ?: 0) + 1
         }
-        return counters.values.any { it == 3 }
+        return counters.entries
+            .any { it.value == 3 || (it.value + (counters['J'] ?: 0) == 3 && it.key != 'J') }
     }
 
     private fun isTwoPairs(): Boolean {
@@ -105,6 +127,9 @@ class Hand(
         for (value in counters.values) {
             if (value == 2) {
                 pairsCount++
+            } else if (value == 1 && (counters['J'] ?: 0) > 0) {
+                pairsCount++
+                counters['J'] = (counters['J'] ?: 0) - 1
             }
         }
 
@@ -116,7 +141,8 @@ class Hand(
         for (s in cards) {
             counters[s] = (counters[s] ?: 0) + 1
         }
-        return counters.values.any { it == 2 }
+        return counters.entries
+            .any { it.value == 2 || (it.value + (counters['J'] ?: 0) == 2 && it.key != 'J') }
     }
 
     override fun hashCode(): Int {

@@ -1,6 +1,6 @@
 package day7
 
-const val symbolsByStrengthDesc = "AKQJT98765432"
+const val symbolsByStrengthDesc = "AKQT98765432J"
 
 fun compareSymbols(a: Char, b: Char): Long =
     (symbolsByStrengthDesc.indexOf(b) - symbolsByStrengthDesc.indexOf(a)).toLong()
@@ -12,4 +12,8 @@ fun part1(text: String): Long {
     return handBids.foldIndexed(0L) { index, acc, handBid ->
         acc + (index + 1) * handBid.bid
     }
+}
+
+fun part2(text: String): Long {
+    return 0
 }
