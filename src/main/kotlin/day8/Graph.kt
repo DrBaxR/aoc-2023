@@ -10,8 +10,8 @@ class Graph(nodes: List<Node>) {
         map = mutableMap
     }
 
-    fun traverse(instructions: String): Int {
-        var currentNodes = map.keys.filter { it.endsWith("A") }.map { map[it]!! }
+    fun traverse(start: String, instructions: String): Int {
+        var currentNode = map[start]!!
 
         var reachedDestination = false
         var stepsCount = 0
@@ -20,10 +20,9 @@ class Graph(nodes: List<Node>) {
             instructions.forEach {
                 stepsCount++
 
-                val nextNodes = currentNodes.map { cn -> map[cn.getNext(it)]!! }
-                currentNodes = nextNodes
+                currentNode = map[currentNode.getNext(it)]!!
 
-                if (currentNodes.all { it.id.endsWith("Z") }) {
+                if (currentNode.id.endsWith("Z")) {
                     reachedDestination = true
                 }
             }
