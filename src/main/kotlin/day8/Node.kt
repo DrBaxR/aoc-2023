@@ -14,4 +14,12 @@ class Node(line: String) {
         left = neighbors[0].filter { it != '(' }
         right = neighbors[1].filter { it != ')' }
     }
+
+    fun getNext(move: Char): String {
+        return when (move) {
+            'L' -> left
+            'R' -> right
+            else -> throw IllegalArgumentException("Unknown move: $move")
+        }
+    }
 }

@@ -11,7 +11,7 @@ class Graph(nodes: List<Node>) {
     }
 
     fun traverse(instructions: String): Int {
-        var currentNode = map["AAA"]!!
+        var currentNodes = map.keys.filter { it.endsWith("A") }.map { map[it]!! }
 
         var reachedDestination = false
         var stepsCount = 0
@@ -19,12 +19,11 @@ class Graph(nodes: List<Node>) {
 
             instructions.forEach {
                 stepsCount++
-                when (it) {
-                    'L' -> currentNode = map[currentNode.left]!!
-                    'R' -> currentNode = map[currentNode.right]!!
-                }
 
-                if (currentNode.id == "ZZZ") {
+                val nextNodes = currentNodes.map { cn -> map[cn.getNext(it)]!! }
+                currentNodes = nextNodes
+
+                if (currentNodes.all { it.id.endsWith("Z") }) {
                     reachedDestination = true
                 }
             }
