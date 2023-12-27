@@ -2,4 +2,4 @@
 
 This repo contains my solutions for the [Advent of Code 2023](https://adventofcode.com/2023) challenges.
 
-**Stars obtained:** 14/50
+**Stars obtained:** 15/50
