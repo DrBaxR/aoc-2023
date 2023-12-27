@@ -12,9 +12,17 @@ class Sequence(private val numbers: List<Long>) {
         return getLastNumber() + getDifferenceSequence().predictNextValue()
     }
 
-    private fun getLastNumber(): Long {
-        return numbers.last()
+    fun predictPreviousValue(): Long {
+        if (isAllZeros()) {
+            return 0
+        }
+
+        return getFirstNumber() - getDifferenceSequence().predictPreviousValue()
     }
+
+    private fun getLastNumber(): Long = numbers.last()
+
+    private fun getFirstNumber(): Long = numbers.first()
 
     private fun isAllZeros(): Boolean {
         return numbers.all { it == 0L }

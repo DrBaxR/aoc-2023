@@ -25,4 +25,11 @@ class SequenceTest {
 
         assertEquals(68, sequence.predictNextValue())
     }
+
+    @Test
+    fun predictPreviousValue() {
+        val sequence = Sequence("10 13 16 21 30 45")
+
+        assertEquals(5, sequence.predictPreviousValue())
+    }
 }
