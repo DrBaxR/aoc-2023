@@ -1,7 +1,7 @@
-import day9.part2
+import day10.part1
 
 fun main() {
-    val input = object {}::class.java.getResource("day9.txt")!!.readText()
+    val input = object {}::class.java.getResource("day10.txt")!!.readText()
 
-    println(part2(input))
+    println(part1(input))
 }
