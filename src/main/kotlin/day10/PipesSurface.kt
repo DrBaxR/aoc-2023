@@ -105,7 +105,48 @@ class PipesSurface(text: String) {
             }
     }
 
+    fun getConnectedPipes(position: Position): List<Pipe> {
+        val pipe = getPipe(position) ?: return emptyList()
+        val neighboursPositions = pipe.getNeighboursPositions()
+
+        return listOfNotNull(
+            getPipe(neighboursPositions.first),
+            getPipe(neighboursPositions.second),
+        )
+            .filter {
+                try {
+                    val neighborPositions = it.getNeighboursPositions()
+                    neighborPositions.first == pipe.position || neighborPositions.second == pipe.position
+                } catch (e: IllegalArgumentException) {
+                    false
+                }
+            }
+    }
+
+    // NOTE: only path and max distance and path is computed reliably
     fun generateDistanceMap(): Array<Array<Long>> {
-        TODO("The map that is a matrix of distances from the start pipe")
+        val start = getStart() ?: return emptyArray()
+
+        val distanceMap = Array(pipes.size) { Array(pipes[0]!!.size) { 0L } }
+        distanceMap[start.position.y.toInt()][start.position.x.toInt()] = 0
+
+        val queue = getStartConnectedPipes().toMutableList()
+
+        while (queue.isNotEmpty()) {
+            val pipe = queue.removeFirst()
+            val distance = distanceMap[pipe.position.x.toInt()][pipe.position.y.toInt()]
+
+            val neighbours = getConnectedPipes(pipe.position)
+            neighbours.forEach { neighbour ->
+                if (distanceMap[neighbour.position.x.toInt()][neighbour.position.y.toInt()] != 0L) {
+                    return@forEach
+                }
+
+                distanceMap[neighbour.position.x.toInt()][neighbour.position.y.toInt()] = distance + 1
+                queue.add(neighbour)
+            }
+        }
+
+        return distanceMap
     }
 }
